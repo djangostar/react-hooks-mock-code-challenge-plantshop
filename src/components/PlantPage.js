@@ -1,54 +1,56 @@
-import React, { useEffect, useState }from "react";
+import React, { useEffect, useState } from "react";
 import NewPlantForm from "./NewPlantForm";
 import PlantList from "./PlantList";
 import Search from "./Search";
 
 function PlantPage() {
   const [plants, setPlants] = useState([])
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchPlant, setSearchPlant] = useState("")
 
   useEffect(() => {
     fetch("http://localhost:6001/plants")
-      .then((r) => r.json())
-      .then((plantsArray) => {
-        setPlants(plantsArray);
-      });
-  }, []);
-  
+      .then((res) => res.json())
+      .then((plantsArray) => setPlants(plantsArray))
+  }, [])
+
   function handleAddPlant(newPlant) {
-    const updatedPlantsArray = [...plants, newPlant]
-    setPlants(updatedPlantsArray)
+    const updatedPlants = [...plants, newPlant]
+    setPlants(updatedPlants)
   }
 
   function handleDeletePlant(id) {
-    const updatedPlantsArray = plants.filter(plant => plant.id !== id)
-    setPlants(updatedPlantsArray)
+    const updatedPlants = plants.filter((plant => plant.id !== id))
+    setPlants(updatedPlants)
   }
 
-  function handleUpdatePlant(updatedPlant) {
-    console.log(updatedPlant)
-    const updatedPlantsArray = plants.map(plant => {
-      if (plant.id === updatedPlant.id) {
-        return updatedPlant
+  function handleUpdatePricePlant(updatePlant) {
+    const updatedPlants = plants.map((plant) => {
+      if (plant.id === updatePlant.id) {
+        return updatePlant
       } else {
-        return plant;
+        return plant
       }
     })
-    setPlants(updatedPlantsArray)
+    setPlants(updatedPlants)
   }
 
-  const displayedPlants = plants.filter(plant => {
-    return plant.name.toLowerCase().includes(searchTerm.toLowerCase());
-  })
+  const displayedPlants = plants.filter((plant => {
+    return plant.name.toLowerCase().includes(searchPlant.toLowerCase());
+  }))
 
   return (
     <main>
-      <NewPlantForm onAddPlant={handleAddPlant} />
-      <Search search={searchTerm} onSearchChange={setSearchTerm}/>
+      <NewPlantForm
+        onAddPlant={handleAddPlant} 
+      />
+      <Search 
+        searchPlant={searchPlant}
+        onSearchChange={setSearchPlant} 
+      />
       <PlantList 
-        plants={displayedPlants} 
+        plants={displayedPlants}
         onDeletePlant={handleDeletePlant}
-        onUpdatePlant={handleUpdatePlant}
+        onUpdatePrice={handleUpdatePricePlant}
       />
     </main>
   );

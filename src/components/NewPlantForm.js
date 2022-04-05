@@ -7,49 +7,47 @@ function NewPlantForm({ onAddPlant }) {
 
   function handleSubmit(e) {
     e.preventDefault()
-    // make POST request
+    const plantData = {
+      name: name,
+      image: image,
+      price: price
+    };
     fetch("http://localhost:6001/plants", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        name: name,
-        image: image,
-        price: price,
-      }),
+      body: JSON.stringify(plantData)
     })
       .then((res) => res.json())
-      .then(newPlant => onAddPlant(newPlant))
-      
-    // add the new plant to the page
+      .then((newPlant) => onAddPlant(newPlant))
   }
 
   return (
     <div className="new-plant-form">
       <h2>New Plant</h2>
       <form onSubmit={handleSubmit}>
-        <input
-        type="text"
-        name="name"
-        placeholder="Plant name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        />
-        <input
-        type="text" 
-        name="image" 
-        placeholder="Image URL" 
-        value={image} 
-        onChange={(e) => setImage(e.target.value)}
+        <input 
+          type="text" 
+          name="name" 
+          placeholder="Plant name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
         <input 
-        type="number" 
-        name="price" 
-        step="0.01" 
-        placeholder="Price"
-        value={price}
-        onChange={(e) => setPrice(parseFloat(e.target.value))} 
+          type="text" 
+          name="image" 
+          placeholder="Image URL"
+          value={image}
+          onChange={(e) => setImage(e.target.value)}
+        />
+        <input 
+          type="number" 
+          name="price" 
+          step="0.01" 
+          placeholder="Price"
+          value={price}
+          onChange={(e) => setPrice(parseFloat(e.target.value))}
         />
         <button type="submit">Add Plant</button>
       </form>
